@@ -1,14 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import { backgroundColor } from '../../utils/colors';
-import { Text } from 'react-native';
 
-export default function Hello() {
+export default function Preloading() {
+    const router = useRouter();
+    useEffect(() => {
+        const checkToken = async () => {
+            const value = await AsyncStorage.getItem('token');
+            if (value) {
+                router.replace('/login'); 
+            } else {
+                router.replace('/login'); 
+            }
+        };
+
+        checkToken();
+    }, []);
+
     return ( 
         <View style={styles.container}>
-            <Text>Hello World</Text>
+            <Image
+                source={require('../../../assets/splashPetcare.png')}
+                style={styles.backgroundImage}
+            />
         </View>
     );
 }
