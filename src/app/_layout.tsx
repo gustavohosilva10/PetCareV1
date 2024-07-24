@@ -1,10 +1,10 @@
 import { Stack } from "expo-router";
 
-export default function Layout() {  
-
+export default function Layout() {
     return (
-        <Stack initialRouteName="preloading/index"> 
-            <Stack.Screen name="preloading/index" options={{ headerShown: false}} />
+        <Stack> 
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="preloading/index" options={{ headerShown: false }} />
         </Stack>    
     );
 }
