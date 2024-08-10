@@ -7,9 +7,9 @@ import ErrorMessageModal from '../../components/ErrorMessageModal';
 import PasswordInput from '../../components/PasswordInput';
 import GenericInput from '../../components/GenericInput';
 import { txtTittle, txtSubtittle, txtRedefinitionPassword, txtRedefinition, txtAccountQuestion, txtRegister, txtEmail, txtPassword, txtLogin, txtNotValidForm } from '../../utils/text';
+import { Link } from "expo-router";
 
 export default function Login() {
-    const navigation = useNavigation();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,12 +19,8 @@ export default function Login() {
     const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
 
     const handleLogin = async () => {
-        // Implementação da lógica de login
     };
 
-    const handleForgotPassword = () => {
-        // Implementação da lógica de recuperação de senha
-    };
 
     const handleSignUp = () => {
         // Implementação da lógica de registro
@@ -66,8 +62,12 @@ export default function Login() {
                         >
                             <Text style={styles.buttonText}>{txtLogin}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={handleForgotPassword}>
-                            <Text style={styles.forgotPassword}>{txtRedefinitionPassword} <Text style={styles.bold}>{txtRedefinition}</Text></Text>
+                        <TouchableOpacity>
+                            <Text style={styles.forgotPassword}>{txtRedefinitionPassword} 
+                                <Link href="/recoveryPassword" style={styles.bold}>
+                                    {txtRedefinition}
+                                </Link>
+                            </Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={handleSignUp}>
                             <Text style={styles.signUp}>{txtAccountQuestion} <Text style={styles.bold}>{txtRegister}</Text></Text>

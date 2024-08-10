@@ -9,7 +9,6 @@ export default function ErrorMessageModal({ visible, message, onClose }) {
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
-
     >
       <View style={styles.container}>
         <View style={styles.modalContent}>

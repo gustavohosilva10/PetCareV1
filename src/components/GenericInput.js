@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import Eye from '../../assets/icons/Eye.svg';
 import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColor, tittleForms } from '../utils/colors';
 
 const PasswordInput = ({ label, placeholder, value, onChangeText, maxLength, keyboardType}) => {

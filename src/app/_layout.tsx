@@ -6,6 +6,7 @@ export default function Layout() {
             <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen name="preloading/index" options={{ headerShown: false }} />
             <Stack.Screen name="login/index" options={{ headerShown: false }} />
+            <Stack.Screen name="recoveryPassword/index" options={{ headerShown: false }} />
         </Stack>    
     );
 }
