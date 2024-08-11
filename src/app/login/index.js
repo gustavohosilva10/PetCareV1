@@ -70,7 +70,11 @@ export default function Login() {
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={handleSignUp}>
-                            <Text style={styles.signUp}>{txtAccountQuestion} <Text style={styles.bold}>{txtRegister}</Text></Text>
+                            <Text style={styles.signUp}>{txtAccountQuestion} 
+                                <Link href="/register" style={styles.bold}>
+                                    {txtRegister}
+                                </Link>
+                            </Text>
                         </TouchableOpacity>
                     </View>
                     <ErrorMessageModal
