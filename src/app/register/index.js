@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColor, tittleForms } from '../../utils/colors';
-//import Api from '../../api';
+import Api from '../../api';
 import ErrorMessageModal from '../../components/ErrorMessageModal';
 import RowInputs from '../../components/RowInputs';
 import { ScrollView } from 'react-native';
@@ -35,18 +35,22 @@ export default function Register() {
             setIsErrorModalVisible(true);
             return;
         }
-         
+
         try {
-           /*  const response = await Api.register(email,name,password,document,cellphone, birthdate)
-            if (response && response.message) {
-                setMessage(response.message);
+            const response = await Api.register(email, name, password, document, cellphone, birthdate)
+            if (response.data.message) {
+                setMessage(response.data.message);
                 setIsErrorModalVisible(true);
-              } else {
-                if (response && response.errors) {
-                  setMessage(response.errors.join('\n'));
-                  setIsErrorModalVisible(true);
+            } else {
+                if (response.error) {
+                    setMessage(response.error);
+                    setIsErrorModalVisible(true);
                 }
-              } */
+            }
+            if (response.errors) {
+                setMessage(response.errors);
+                setIsErrorModalVisible(true);
+            }
         } catch (error) {
             setMessage('Erro ao realizar o cadastro');
             setIsErrorModalVisible(true);
@@ -66,87 +70,87 @@ export default function Register() {
     return (
         <SafeAreaProvider>
             <View style={styles.container}>
-            <ScrollView>
-                <View style={styles.header}>
-                    <Image
-                        source={require('../../../assets/InitialPhoto.png')}
-                        style={styles.image}
-                    />
-                    <Text style={styles.welcomeText}>{txtCreateAccount}</Text>
-                    <Text style={styles.appText}>{txtInfoCreateAccount}</Text>
-                </View>
-                <View style={styles.content}>
-                    <GenericInput
-                        label={txtName}
-                        placeholder="Nome"
-                        value={name}
-                        onChangeText={setName}
-                        maxLength={60}
-                        keyboardType="email-address"
-                    />
-                    <RowInputs>
+                <ScrollView>
+                    <View style={styles.header}>
+                        <Image
+                            source={require('../../../assets/InitialPhoto.png')}
+                            style={styles.image}
+                        />
+                        <Text style={styles.welcomeText}>{txtCreateAccount}</Text>
+                        <Text style={styles.appText}>{txtInfoCreateAccount}</Text>
+                    </View>
+                    <View style={styles.content}>
                         <GenericInput
-                            label={txtDocument}
-                            placeholder="000.000.000-00"
-                            value={document}
-                            onChangeText={(text) => setDocument(maskCPF(text))}
+                            label={txtName}
+                            placeholder="Nome"
+                            value={name}
+                            onChangeText={setName}
                             maxLength={60}
-                            keyboardType="numeric"
+                            keyboardType="email-address"
                         />
+                        <RowInputs>
+                            <GenericInput
+                                label={txtDocument}
+                                placeholder="000.000.000-00"
+                                value={document}
+                                onChangeText={(text) => setDocument(maskCPF(text))}
+                                maxLength={60}
+                                keyboardType="numeric"
+                            />
+
+                            <GenericInput
+                                label={txtCellphone}
+                                placeholder="(00) 00000-0000"
+                                value={cellphone}
+                                onChangeText={(text) => setCellphone(maskPhoneNumber(text))}
+                                maxLength={20}
+                                keyboardType="numeric"
+                            />
+                        </RowInputs>
 
                         <GenericInput
-                            label={txtCellphone}
-                            placeholder="(00) 00000-0000"
-                            value={cellphone}
-                            onChangeText={(text) => setCellphone(maskPhoneNumber(text))}
-                            maxLength={20}
+                            label={txtBirthDate}
+                            placeholder="dd-mm-aaaa"
+                            value={birthdate}
+                            onChangeText={(text) => setBirthDate(maskBirthDate(text))}
+                            maxLength={10}
                             keyboardType="numeric"
                         />
-                    </RowInputs>
+                        <GenericInput
+                            label={txtEmail}
+                            placeholder="Email"
+                            value={email}
+                            onChangeText={setEmail}
+                            maxLength={60}
+                            keyboardType="email-address"
+                        />
+                        <PasswordInput
+                            label={txtPassword}
+                            placeholder="Senha"
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry={true}
+                        />
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            style={styles.loginButton}
+                            onPress={handleRegister}
+                        >
+                            <Text style={styles.buttonText}>{txtRegister}</Text>
+                        </TouchableOpacity>
 
-                    <GenericInput
-                        label={txtBirthDate}
-                        placeholder="dd/mm/aaaa"
-                        value={birthdate}
-                        onChangeText={(text) => setBirthDate(maskBirthDate(text))}
-                        maxLength={10}
-                        keyboardType="numeric"
-                    />
-                    <GenericInput
-                        label={txtEmail}
-                        placeholder="Email"
-                        value={email}
-                        onChangeText={setEmail}
-                        maxLength={60}
-                        keyboardType="email-address"
-                    />
-                    <PasswordInput
-                        label={txtPassword}
-                        placeholder="Senha"
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry={true}
-                    />
-                </View>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                        style={styles.loginButton}
-                        onPress={handleRegister}
-                    >
-                        <Text style={styles.buttonText}>{txtRegister}</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={handleSign}>
+                            <Text style={styles.signUp}>{txtBackLogin} <Text style={styles.bold}>{txtLogin}</Text></Text>
+                        </TouchableOpacity>
+                    </View>
 
-                    <TouchableOpacity onPress={handleSign}>
-                        <Text style={styles.signUp}>{txtBackLogin} <Text style={styles.bold}>{txtLogin}</Text></Text>
-                    </TouchableOpacity>
-                </View>
-
-                <ErrorMessageModal
-                    visible={isErrorModalVisible}
-                    message={message}
-                    onClose={() => setIsErrorModalVisible(false)}
-                />
-            </ScrollView>
+                    <ErrorMessageModal
+                        visible={isErrorModalVisible}
+                        message={message}
+                        onClose={() => setIsErrorModalVisible(false)}
+                    />
+                </ScrollView>
 
             </View>
 
@@ -191,7 +195,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 20, 
+        paddingBottom: 20,
     },
     loginButton: {
         width: '90%',
@@ -214,7 +218,7 @@ const styles = StyleSheet.create({
     signUp: {
         marginTop: 20,
         color: terciaryColor,
-        paddingBottom:20
+        paddingBottom: 20
     },
     bold: {
         fontWeight: 'bold',

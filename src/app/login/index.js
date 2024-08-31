@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import ErrorMessageModal from '../../components/ErrorMessageModal';
 import PasswordInput from '../../components/PasswordInput';
 import GenericInput from '../../components/GenericInput';
+import Api from '../../api';
 import { txtTittle, txtSubtittle, txtRedefinitionPassword, txtRedefinition, txtAccountQuestion, txtRegister, txtEmail, txtPassword, txtLogin, txtNotValidForm } from '../../utils/text';
 import { Link } from "expo-router";
 
@@ -19,6 +20,29 @@ export default function Login() {
     const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
 
     const handleLogin = async () => {
+        if (!email || !password) {
+            setMessage(txtNotValidForm);
+            setIsErrorModalVisible(true);
+            return;
+        }
+        try {
+            const response = await Api.login(email, password)
+                console.log(response.data.error);
+                //adicionar rota para home
+            if (response.data.token) {
+                console.log(response.data);
+
+            } else {
+                if (response.data.error) {
+                    setMessage(response.data.error);
+                    setIsErrorModalVisible(true);
+                }
+            }
+        } catch (error) {
+            setMessage('Erro ao realizar o login, tente novamente mais tarde!');
+            setIsErrorModalVisible(true);
+        }
+
     };
 
 
@@ -63,14 +87,14 @@ export default function Login() {
                             <Text style={styles.buttonText}>{txtLogin}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <Text style={styles.forgotPassword}>{txtRedefinitionPassword} 
+                            <Text style={styles.forgotPassword}>{txtRedefinitionPassword}
                                 <Link href="/recoveryPassword" style={styles.bold}>
                                     {txtRedefinition}
                                 </Link>
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={handleSignUp}>
-                            <Text style={styles.signUp}>{txtAccountQuestion} 
+                            <Text style={styles.signUp}>{txtAccountQuestion}
                                 <Link href="/register" style={styles.bold}>
                                     {txtRegister}
                                 </Link>
