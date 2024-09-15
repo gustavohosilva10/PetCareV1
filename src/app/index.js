@@ -1,6 +1,6 @@
 import { Redirect } from "expo-router";
 
 const Index = () => {
-	return <Redirect href="/preloading" />;
+	return <Redirect href="/profile" />;
 };
 export default Index;
