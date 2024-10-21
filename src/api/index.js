@@ -10,17 +10,17 @@ export default {
                 password: password,
             });
 
-            if (response.data.token) {
+            if (response?.data?.token) {
                 await AsyncStorage.setItem('token', response.data.token);
 
                 return response;
             }
 
-            if (response.data.errors) {
+            if (response?.data?.errors) {
                 return { errors: response.data.errors };
             }
 
-            if (response.data.error) {
+            if (response?.data?.error) {
                 return { error: response.data.error };
             }
 
@@ -64,34 +64,33 @@ export default {
         }
     },
 
-    user: async () => {
+    getUser: async () => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`${BASE_API}/api/user/get`, { headers: { "Authorization": `Bearer ${token}` } });
-
-            if (response.data) {
-                return response.data[0];
-            }
-        } catch (error) {
-            alert('Por favor tente mais tarde! ;(');
-        }
-    },
-
-    pets: async () => {
-        try {
-            const token = await AsyncStorage.getItem('token');
-            const response = await axios.get(`${BASE_API}/api/petsUser/get`, { headers: { "Authorization": `Bearer ${token}` } });
-            if (response.data) {
+            const response = await axios.get(`${BASE_API}/api/user/get`, { headers: { "Authorization": `${token}` } });
+            if (response?.data) {
                 return response.data;
             }
         } catch (error) {
-            alert('Por favor tente mais tarde! ;(');
+            return 'Erro ao buscar dados do usuario.';
         }
     },
 
-    getinfopets: async () => {
+    getPets: async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const response = await axios.get(`${BASE_API}/api/petsUser/get`, { headers: { "Authorization": `${token}` } });
+            if (response?.data) {
+                return response.data;
+            }
+        } catch (error) {
+            return 'Erro ao buscar dados do pet.';
+        }
+    },
+
+    getInfoPets: async () => {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get(`${BASE_API}/api/petsUser/informations`, { headers: { "Authorization": `Bearer ${token}` } });
+        const response = await axios.get(`${BASE_API}/api/petsUser/informations`, { headers: { "Authorization": `${token}` } });
 
         if (response.data) {
             return response.data;
@@ -111,11 +110,12 @@ export default {
                 temperament: temperament,
                 weight: weight
             }
-            console.log(data);
+
             const headers = {
-                "Authorization": `Bearer ${token}`,
+                "Authorization": `${token}`,
                 'Content-Type': 'application/json'
             }
+
             const response = await axios.post(`${BASE_API}/api/petsUser/store`, data, { headers: headers });
             if (response.data) {
                 return response.data;
@@ -129,7 +129,7 @@ export default {
         const token = await AsyncStorage.getItem('token');
         const idPet = await AsyncStorage.getItem('idPet');
 
-        const response = await axios.get(`${BASE_API}/api/petsUser/show/${idPet}`, { headers: { "Authorization": `Bearer ${token}` } });
+        const response = await axios.get(`${BASE_API}/api/petsUser/show/${idPet}`, { headers: { "Authorization": `${token}` } });
 
         if (response.data) {
             return response.data;
@@ -149,10 +149,9 @@ export default {
                 date: dateAtualOne,
                 repeat_vaccine: dateAtualTwo
             }
-            console.log(data);
 
             const headers = {
-                "Authorization": `Bearer ${token}`
+                "Authorization": `${token}`
             }
             const response = await axios.post(`${BASE_API}/api/petsVaccines/store`, data, { headers: headers });
 
@@ -235,23 +234,27 @@ export default {
         }
     },
 
-    userUpdate: async (name, cellphone, password, fatherMother) => {
+    updateUser: async (name, email, document, cellphone) => {
         try {
             const token = await AsyncStorage.getItem('token');
             const data = {
                 name: name,
                 cellphone: cellphone,
-                password: password,
-                father_or_mother: fatherMother
+                document: document,
+                email: email
             }
             const headers = {
-                "Authorization": `Bearer ${token}`
+                "Authorization": `${token}`
             }
-            const response = await axios.post(`${BASE_API}/api/user/edit`, data, { headers: headers });
-
+            const response = await axios.patch(`${BASE_API}/api/user/update`, data, { headers: headers });
+            
             return response.data;
         } catch (error) {
-            return error.response.data.error;
+            if (error.response.status === 422) {
+                return { errors: error.response.data.errors };
+            } else {
+                return 'Erro ao realizar o login';
+            }
         }
 
 

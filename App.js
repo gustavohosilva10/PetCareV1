@@ -13,26 +13,9 @@ import RecoveryPasswordScreen from './src/screens/recoveryPassword';
 import RegisterScreen from './src/screens/register';
 import SuccessInfoScreen from './src/screens/components/SuccessInfo';
 import IntroductionScreen from './src/screens/introduction';
-/*import HomeScreen from './src/screens/home';
+import HomeScreen from './src/screens/home';
 import ProfileScreen from './src/screens/profile';
 import UpdateProfileScreen from './src/screens/updateProfile'; 
-import ServicesScreen from './src/screens/services';
-import CartScreen from './src/screens/cart';
-import CreateMEIScreen from './src/screens/createMei';
-import CancelMEIScreen from './src/screens/cancelMei';
-import RequestsScreen from './src/screens/requests';
-import PixScreen from './src/screens/pix';
-import UpdatePasswordScreen  from './src/screens/updatePassword';
-import MovimentRequestScreen from './src/screens/movimentRequest';
-import MovimentRequestMeiCancelScreen from './src/screens/movimentRequestMeiCancel';
-import TaxReturnScreen from './src/screens/taxReturn';
-import MovimentRequestTaxReturnScreen from './src/screens/movimentRequestTaxReturn';
-import DebitConsultcreen from './src/screens/debitConsult';
-import MovimentRequestDebitConsultScreen from './src/screens/movimentRequestDebitConsult';
-import InstallmentsDebitsScreen from './src/screens/installmentsDebits'; 
-import MovimentInstallmentsDebitsScreen from './src/screens/movimentInstallmentsDebits'; 
-import CreditCardScreen from './src/screens/creditCard';
-import ConsultHistoryScreen from './src/screens/consultHistory'; */
 import ButtomTab from './src/screens/components/ButtomTab';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -65,8 +48,10 @@ const Tab = createBottomTabNavigator();
     >
       <Tab.Screen
         name="Home1"
-        component={IntroductionScreen}
-        options={{
+        component={HomeScreen}
+        headerShown={false}
+        options={{ headerShown: false }}
+        /* options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused }) => (
             <Image
@@ -77,25 +62,27 @@ const Tab = createBottomTabNavigator();
                 resizeMode: 'cover',
               }}
             />
-          ),
+          ),  
           headerShown: false,
-        }}
+        }} */
       />
       <Tab.Screen
         name="Home2"
         component={IntroductionScreen}
-        options={{
+        options={{ headerShown: false }}
+       /*  options={{
           tabBarLabel: 'Novo Pet',
           tabBarIcon: ({ focused }) => (
             <ButtomTab  style={{ paddingTop: 25 }}/>
-          ),
+          ), 
           headerShown: false,
-        }}
+        }}  */
       />
       <Tab.Screen
-        name="ProfileTab"
-        component={IntroductionScreen}
-        options={({ route }) => ({
+        name="Perfil"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+        /* options={({ route }) => ({
           tabBarLabel: 'Perfil',
           tabBarIcon: ({ focused }) => (
             <Image
@@ -106,9 +93,9 @@ const Tab = createBottomTabNavigator();
                 resizeMode: 'cover',
               }}
             />
-          ),
+          ),  
           headerShown: false,
-        })}
+        })} */
         listeners={({ navigation, route }) => ({
           focus: () => {
             setProfileTabFocus(true);
@@ -133,9 +120,9 @@ export default function App() {
         <Stack.Screen name="RecoveryPassword" component={RecoveryPasswordScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SuccessInfo" component={SuccessInfoScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false }} /> 
-   {/*      <Stack.Screen name="Home" component={HomeTabs} options={{ headerShown: false }} /> 
+        <Stack.Screen name="Home" component={HomeTabs} options={{ headerShown: false }} /> 
         <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} /> 
-        <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{ headerShown: false }} />  */}
+        <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{ headerShown: false }} />  
       </Stack.Navigator>
     </NavigationContainer>
   );

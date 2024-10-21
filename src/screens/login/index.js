@@ -30,7 +30,6 @@ export default function LoginScreen() {
     
         try {
             const response = await Api.login(email, password);
-            console.warn(response);
     
             if (response?.data?.token) {
                 navigation.navigate('Home');

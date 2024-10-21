@@ -55,6 +55,7 @@ export const txtUpdateInfo = 'Edite as informações do seu perfil';
 export const txtMyProfile = 'Meu perfil';
 export const txtMyProfileInfo = 'Edite as informações do seu perfil sempre que necessario';
 export const txtUpdateProfileTitle = 'Editar perfil';
+export const txtErrorUpdateProfile = 'Erro ao realizar a atualização de perfil';
 
 export const txtSave = 'Salvar';
 

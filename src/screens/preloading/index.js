@@ -7,21 +7,24 @@ import { backgroundColor } from '../../utils/colors';
 
 export default function PreloadingScreen() {
     const navigation = useNavigation();
-    useFocusEffect(() => {
-        const status = AsyncStorage.getItem('completedIntroduction');
-        if (status === 'completed') {
-            AsyncStorage.getItem('token').then(value => {
-                if (value) {
-                    navigation.navigate('Home');
-                }else{ 
-                    navigation.navigate('Login');
-                }
-            }); 
-        }else{
-            navigation.navigate('Introduction');
+    useEffect(() => {
+        async function loadTutorialStatus() {
+            const status = await AsyncStorage.getItem('completedIntroduction');
+            console.warn(status);
+            if (status === 'completed') {
+                AsyncStorage.getItem('token').then(value => {
+                    if (value) {
+                        navigation.navigate('Home');
+                    }else{ 
+                        navigation.navigate('Login');
+                    }
+                }); 
+            }else{
+                navigation.navigate('Introduction');
+            }
         }
-       
-    });
+        loadTutorialStatus()
+    }, []); 
 
     return (
         <View style={styles.container}>
