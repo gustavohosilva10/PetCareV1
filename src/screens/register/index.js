@@ -2,20 +2,22 @@ import React, { useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColor, tittleForms } from '../../utils/colors';
+import { useNavigation } from '@react-navigation/native';
 import Api from '../../api';
-import ErrorMessageModal from '../../components/ErrorMessageModal';
-import RowInputs from '../../components/RowInputs';
+import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
+import RowInputs from '../../screens/components/RowInputs';
 import { ScrollView } from 'react-native';
 import {
     txtRegister, txtEmail, txtPassword, txtLogin, txtNotValidForm,
     txtName, txtDocument, txtCellphone, txtBirthDate, txtCreateAccount,
-    txtInfoCreateAccount, txtBackLogin
+    txtInfoCreateAccount, txtBackLogin, txtErrorRegister, txtUnknown
 } from '../../utils/text';
-import PasswordInput from '../../components/PasswordInput';
-import GenericInput from '../../components/GenericInput';
+import PasswordInput from '../../screens/components/PasswordInput';
+import GenericInput from '../components/GenericInput';
 import { maskCPF, maskPhoneNumber, maskBirthDate } from '../../utils/masks';
 
-export default function Register() {
+export default function RegisterScreen() {
+    const navigation = useNavigation();
 
     const [name, setName] = useState('');
     const [document, setDocument] = useState('');
@@ -37,34 +39,50 @@ export default function Register() {
         }
 
         try {
-            const response = await Api.register(email, name, password, document, cellphone, birthdate)
-            if (response.data.message) {
+            const response = await Api.register(email, name, password, document, cellphone, birthdate);
+
+            if (response?.data?.message) {
                 setMessage(response.data.message);
+                clearInput();
                 setIsErrorModalVisible(true);
-            } else {
-                if (response.error) {
-                    setMessage(response.error);
-                    setIsErrorModalVisible(true);
-                }
-            }
-            if (response.errors) {
-                setMessage(response.errors);
+            } 
+
+            else if (response?.errors) {
+                setMessage(response.errors.join('\n'));
+                setIsErrorModalVisible(true);
+            } 
+            
+            else {
+                setMessage(txtUnknown);
                 setIsErrorModalVisible(true);
             }
+
         } catch (error) {
-            setMessage('Erro ao realizar o cadastro');
+            setMessage(txtErrorRegister);
             setIsErrorModalVisible(true);
         }
+
     };
+
+    const clearInput = () => {
+        setName('');
+        setDocument('');
+        setCellphone('');
+        setBirthDate('');
+        setEmail('');
+        setPassword('');
+    }
 
     const onPressEyePassword = () => {
         setVisiblePassowrd(!visiblePassword);
     }
 
     const handleForgotPassword = () => {
+        navigation.navigate('RecoveryPassword');
     };
 
     const handleSign = () => {
+        navigation.navigate('Login');
     };
 
     return (
@@ -110,7 +128,7 @@ export default function Register() {
 
                         <GenericInput
                             label={txtBirthDate}
-                            placeholder="dd-mm-aaaa"
+                            placeholder="dd/mm/aaaa"
                             value={birthdate}
                             onChangeText={(text) => setBirthDate(maskBirthDate(text))}
                             maxLength={10}
@@ -151,7 +169,6 @@ export default function Register() {
                         onClose={() => setIsErrorModalVisible(false)}
                     />
                 </ScrollView>
-
             </View>
 
         </SafeAreaProvider>
@@ -170,8 +187,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        marginHorizontal: 20,
-        marginBottom: 70
+        marginHorizontal: 20
     },
     image: {
         width: 290,
@@ -195,7 +211,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 20,
     },
     loginButton: {
         width: '90%',

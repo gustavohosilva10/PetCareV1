@@ -18,13 +18,12 @@ const RowInputs = ({ children }) => {
 
 const styles = StyleSheet.create({
     component:{
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+      flexDirection: 'row',
+      justifyContent: 'space-between',
     },
     inputContainer: {
-        flex: 1,
-        minWidth: '45%',
-        marginHorizontal: 5,
+      flex: 1,
+      paddingHorizontal: 2 
     },
 });
 export default RowInputs;

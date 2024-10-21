@@ -57,3 +57,8 @@ export const txtMyProfileInfo = 'Edite as informações do seu perfil sempre que
 export const txtUpdateProfileTitle = 'Editar perfil';
 
 export const txtSave = 'Salvar';
+
+export const txtUnknown = 'Ocorreu um erro desconhecido. Tente novamente.';
+export const txtErrorServer = 'Erro na conexão com o servidor. Tente novamente mais tarde.';
+export const txtErrorRegister = 'Erro ao realizar o cadastro';
+export const txtErrorDataUser = 'Erro ao carregar dados do usuário';

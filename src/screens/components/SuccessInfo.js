@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { backgroundColor } from '../utils/colors';
+import { backgroundColor } from '../../utils/colors';
 
 const SuccessInfoScreen = ({ textTop, textBottom }) => {
     const navigation = useNavigation();
 
     return (
-        <View style={styles.container}>IconSucess.png
+        <View style={styles.container}>
             <Image
-                source={require('../../assets/IconSucess.png')} 
+                source={require('../../../assets/IconSucess.png')} 
                 style={styles.image}
             />
             <Text style={styles.textTop}>{textTop}</Text>

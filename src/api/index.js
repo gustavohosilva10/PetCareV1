@@ -1,29 +1,40 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-const BASE_API = 'https://7a84-2804-214-c003-1486-f512-125e-f916-1f4b.ngrok-free.app';
+const BASE_API = 'https://b789-2804-214-c003-11f3-7aed-522d-b427-3303.ngrok-free.app';
 
 export default {
     login: async (email, password) => {
         try {
             const response = await axios.post(`${BASE_API}/api/login`, {
-                email,
-                password
+                email: email,
+                password: password,
             });
-    
-            if (response.token) {
-                await AsyncStorage.setItem('token', response.data.token.access_token);
+
+            if (response.data.token) {
+                await AsyncStorage.setItem('token', response.data.token);
+
                 return response;
             }
-            return response;
-            
+
+            if (response.data.errors) {
+                return { errors: response.data.errors };
+            }
+
+            if (response.data.error) {
+                return { error: response.data.error };
+            }
+
         } catch (error) {
-            console.log(error);
+            if (error.response.status === 422) {
+                return { errors: error.response.data.errors };
+            } else {
+                return 'Erro ao realizar o login';
+            }
         }
-        
     },
 
     register: async (email, name, password, document, cellphone, birth_date) => {
-        try { 
+        try {
             const response = await axios.post(`${BASE_API}/api/register`, {
                 name,
                 cellphone,
@@ -32,11 +43,15 @@ export default {
                 document,
                 birth_date
             });
-            console.log(response.data.message)
             return response;
+  
         } catch (error) {
-            return error.response.data;
-        } 
+            if (error.response.status === 422) {
+                return { errors: error.response.data.errors };
+            } else {
+                return 'Erro ao realizar o login';
+            }
+        }
     },
 
     resetPassword: async (email) => {
@@ -53,10 +68,10 @@ export default {
         try {
             const token = await AsyncStorage.getItem('token');
             const response = await axios.get(`${BASE_API}/api/user/get`, { headers: { "Authorization": `Bearer ${token}` } });
-            
+
             if (response.data) {
                 return response.data[0];
-            } 
+            }
         } catch (error) {
             alert('Por favor tente mais tarde! ;(');
         }
@@ -87,24 +102,24 @@ export default {
         try {
             const token = await AsyncStorage.getItem('token');
             const data = {
-                name:name,
-                date:date,
-                sex:sex,
-                file_pet:file_pet,
-                category:category,
-                port:port,
-                temperament:temperament,
-                weight:weight
+                name: name,
+                date: date,
+                sex: sex,
+                file_pet: file_pet,
+                category: category,
+                port: port,
+                temperament: temperament,
+                weight: weight
             }
             console.log(data);
             const headers = {
                 "Authorization": `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
-            const response = await axios.post(`${BASE_API}/api/petsUser/store`,data,{headers:headers});
+            const response = await axios.post(`${BASE_API}/api/petsUser/store`, data, { headers: headers });
             if (response.data) {
                 return response.data;
-            } 
+            }
         } catch (error) {
             return error.response.error;
         }
@@ -112,7 +127,7 @@ export default {
 
     getInfoPetSelect: async () => {
         const token = await AsyncStorage.getItem('token');
-        const idPet = await AsyncStorage.getItem('idPet');  
+        const idPet = await AsyncStorage.getItem('idPet');
 
         const response = await axios.get(`${BASE_API}/api/petsUser/show/${idPet}`, { headers: { "Authorization": `Bearer ${token}` } });
 
@@ -123,24 +138,24 @@ export default {
 
     registerVaccine: async (nameMedicament, doseMedicament, doseMl, dateAtualOne, dateAtualTwo) => {
         try {
-            const idPet = await AsyncStorage.getItem('idPet');  
+            const idPet = await AsyncStorage.getItem('idPet');
             const token = await AsyncStorage.getItem('token');
             const data = {
-                id_pet:idPet,
-                name_vaccine:nameMedicament,
-                date:dateAtualOne,
-                dose_vaccine:doseMedicament,
-                dose_vaccine_ml:doseMl,
-                date:dateAtualOne,
-                repeat_vaccine:dateAtualTwo
+                id_pet: idPet,
+                name_vaccine: nameMedicament,
+                date: dateAtualOne,
+                dose_vaccine: doseMedicament,
+                dose_vaccine_ml: doseMl,
+                date: dateAtualOne,
+                repeat_vaccine: dateAtualTwo
             }
             console.log(data);
 
             const headers = {
                 "Authorization": `Bearer ${token}`
             }
-            const response = await axios.post(`${BASE_API}/api/petsVaccines/store`,data,{headers:headers});
-            
+            const response = await axios.post(`${BASE_API}/api/petsVaccines/store`, data, { headers: headers });
+
             if (response.data) {
                 return response.data;
             }
@@ -153,7 +168,7 @@ export default {
 
     getInfoVaccine: async () => {
         const token = await AsyncStorage.getItem('token');
-        const idPet = await AsyncStorage.getItem('idPet');  
+        const idPet = await AsyncStorage.getItem('idPet');
 
         const response = await axios.get(`${BASE_API}/api/petsVaccines/show/${idPet}`, { headers: { "Authorization": `Bearer ${token}` } });
 
@@ -162,9 +177,9 @@ export default {
         }
     },
 
-    removeVaccine:async(id_vaccine) => {
+    removeVaccine: async (id_vaccine) => {
         const token = await AsyncStorage.getItem('token');
-        const idPet = await AsyncStorage.getItem('idPet');  
+        const idPet = await AsyncStorage.getItem('idPet');
         const idVaccine = id_vaccine;
 
         const response = await axios.delete(`${BASE_API}/api/petsVaccines/delete/${idVaccine}`, { headers: { "Authorization": `Bearer ${token}` } });
@@ -176,20 +191,20 @@ export default {
     registeMedicament: async (nameVaccine, doseVaccine, doseMl, dateAtualOne, dateAtualTwo) => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const idPet = await AsyncStorage.getItem('idPet');  
+            const idPet = await AsyncStorage.getItem('idPet');
             const data = {
-                id_pet:idPet,
-                name_medicament:nameVaccine,
-                date:dateAtualOne,
-                dose_medicament:doseVaccine,
-                dose_medicament_ml:doseMl,
-                repeat_medicament:dateAtualTwo,
+                id_pet: idPet,
+                name_medicament: nameVaccine,
+                date: dateAtualOne,
+                dose_medicament: doseVaccine,
+                dose_medicament_ml: doseMl,
+                repeat_medicament: dateAtualTwo,
             }
             const headers = {
                 "Authorization": `Bearer ${token}`
             }
-    
-            const response = await axios.post(`${BASE_API}/api/petsMedicaments/store`,data,{headers:headers});
+
+            const response = await axios.post(`${BASE_API}/api/petsMedicaments/store`, data, { headers: headers });
             if (response.data) {
                 return response.data;
             }
@@ -200,7 +215,7 @@ export default {
 
     getInfoMedicament: async () => {
         const token = await AsyncStorage.getItem('token');
-        const idPet = await AsyncStorage.getItem('idPet');  
+        const idPet = await AsyncStorage.getItem('idPet');
 
         const response = await axios.get(`${BASE_API}/api/petsMedicaments/show/${idPet}`, { headers: { "Authorization": `Bearer ${token}` } });
 
@@ -209,9 +224,9 @@ export default {
         }
     },
 
-    removeMedicament:async(id_medicament) => {
+    removeMedicament: async (id_medicament) => {
         const token = await AsyncStorage.getItem('token');
-        const idPet = await AsyncStorage.getItem('idPet');  
+        const idPet = await AsyncStorage.getItem('idPet');
         const idMedicament = id_medicament;
 
         const response = await axios.delete(`${BASE_API}/api/petsMedicaments/delete/${idMedicament}`, { headers: { "Authorization": `Bearer ${token}` } });
@@ -224,27 +239,27 @@ export default {
         try {
             const token = await AsyncStorage.getItem('token');
             const data = {
-                name:name,
-                cellphone:cellphone,
-                password:password,
-                father_or_mother:fatherMother
+                name: name,
+                cellphone: cellphone,
+                password: password,
+                father_or_mother: fatherMother
             }
             const headers = {
                 "Authorization": `Bearer ${token}`
             }
-            const response = await axios.post(`${BASE_API}/api/user/edit`,data,{headers:headers});
-    
+            const response = await axios.post(`${BASE_API}/api/user/edit`, data, { headers: headers });
+
             return response.data;
         } catch (error) {
-           return error.response.data.error;
-        } 
+            return error.response.data.error;
+        }
 
-       
+
     },
 
     getHistoryQr: async () => {
         const token = await AsyncStorage.getItem('token');
-        const idPet = await AsyncStorage.getItem('idPet');  
+        const idPet = await AsyncStorage.getItem('idPet');
 
         const response = await axios.get(`${BASE_API}/api/petsHistory/get/${idPet}`, { headers: { "Authorization": `Bearer ${token}` } });
 

@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { backgroundColor, primaryColor, terciaryColor, tittleForms } from '../../utils/colors';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColor, tittleForms } from '../../utils/colors';
 import { useNavigation } from '@react-navigation/native';
-import ErrorMessageModal from '../../components/ErrorMessageModal';
-import PasswordInput from '../../components/PasswordInput';
-import GenericInput from '../../components/GenericInput';
 import Api from '../../api';
-import { txtTittle, txtSubtittle, txtRedefinitionPassword, txtRedefinition, txtAccountQuestion, txtRegister, txtEmail, txtPassword, txtLogin, txtNotValidForm } from '../../utils/text';
-import { Link } from "expo-router";
+import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
+import { ScrollView } from 'react-native';
+import { txtTittle, txtSubtittle, txtRedefinitionPassword, txtRedefinition, txtAccountQuestion, txtRegister, txtEmail, txtPassword, txtLogin, txtNotValidForm, txtUnknown, txtErrorServer  } from '../../utils/text';
+import PasswordInput from '../../screens/components/PasswordInput';
+import GenericInput from '../components/GenericInput';
 
-export default function Login() {
+export default function LoginScreen() {
+    const navigation = useNavigation();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const [buttonEnabled, setButtonEnabled] = useState(false);
+
     const [visiblePassword, setVisiblePassowrd] = useState(false);
     const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
 
@@ -25,35 +27,51 @@ export default function Login() {
             setIsErrorModalVisible(true);
             return;
         }
+    
         try {
-            const response = await Api.login(email, password)
-                console.log(response.data.error);
-                //adicionar rota para home
-            if (response.data.token) {
-                console.log(response.data);
-
+            const response = await Api.login(email, password);
+            console.warn(response);
+    
+            if (response?.data?.token) {
+                navigation.navigate('Home');
             } else {
-                if (response.data.error) {
-                    setMessage(response.data.error);
-                    setIsErrorModalVisible(true);
+    
+                if (response?.errors) {
+                    setMessage(response.errors.join('\n'));
+                } 
+
+                else if (response?.error) {
+                    setMessage(response.error);
+                } 
+
+                else {
+                    setMessage(txtUnknown);
                 }
+                setIsErrorModalVisible(true);
             }
         } catch (error) {
-            setMessage('Erro ao realizar o login, tente novamente mais tarde!');
+            setMessage(txtErrorServer);
             setIsErrorModalVisible(true);
         }
-
     };
 
+    const onPressEyePassword = () => {
+        setVisiblePassowrd(!visiblePassword);
+    }
+
+    const handleForgotPassword = () => {
+        navigation.navigate('RecoveryPassword');
+    };
 
     const handleSignUp = () => {
-        // Implementação da lógica de registro
+        navigation.navigate('Register');
     };
 
     return (
         <SafeAreaProvider>
             <View style={styles.container}>
                 <ScrollView>
+
                     <View style={styles.header}>
                         <Image
                             source={require('../../../assets/InitialPhoto.png')}
@@ -80,27 +98,24 @@ export default function Login() {
                         />
                     </View>
                     <View style={styles.buttonContainer}>
+
                         <TouchableOpacity
                             style={styles.loginButton}
                             onPress={handleLogin}
                         >
                             <Text style={styles.buttonText}>{txtLogin}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Text style={styles.forgotPassword}>{txtRedefinitionPassword}
-                                <Link href="/recoveryPassword" style={styles.bold}>
-                                    {txtRedefinition}
-                                </Link>
-                            </Text>
+
+                        <TouchableOpacity onPress={handleForgotPassword}>
+                            <Text style={styles.forgotPassword}>{txtRedefinitionPassword} <Text style={styles.bold}>{txtRedefinition}</Text></Text>
                         </TouchableOpacity>
+
                         <TouchableOpacity onPress={handleSignUp}>
-                            <Text style={styles.signUp}>{txtAccountQuestion}
-                                <Link href="/register" style={styles.bold}>
-                                    {txtRegister}
-                                </Link>
-                            </Text>
+                            <Text style={styles.signUp}>{txtAccountQuestion} <Text style={styles.bold}>{txtRegister}</Text></Text>
                         </TouchableOpacity>
+
                     </View>
+
                     <ErrorMessageModal
                         visible={isErrorModalVisible}
                         message={message}
@@ -108,6 +123,7 @@ export default function Login() {
                     />
                 </ScrollView>
             </View>
+
         </SafeAreaProvider>
     );
 }
@@ -120,11 +136,11 @@ const styles = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 5,
+        paddingTop: 5
     },
     content: {
         flex: 1,
-        marginHorizontal: 20,
+        marginHorizontal: 20
     },
     image: {
         width: 290,
@@ -135,14 +151,14 @@ const styles = StyleSheet.create({
     welcomeText: {
         fontSize: 24,
         marginBottom: 0,
-        color: tittleForms,
+        color: tittleForms
     },
     appText: {
         marginTop: 0,
         fontSize: 16,
         color: terciaryColor,
         textAlign: 'center',
-        paddingBottom: 60,
+        paddingBottom: 60
     },
     buttonContainer: {
         flex: 1,
@@ -173,6 +189,6 @@ const styles = StyleSheet.create({
     },
     bold: {
         fontWeight: 'bold',
-        color: primaryColor,
-    },
+        color: primaryColor
+    }
 });

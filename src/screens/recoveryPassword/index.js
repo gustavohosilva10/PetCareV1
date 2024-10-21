@@ -4,11 +4,11 @@ import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'reac
 import { useNavigation } from '@react-navigation/native';
 import { backgroundColor, primaryColor, terciaryColor, tittleForms } from '../../utils/colors';
 //import Api from '../../api';
-import ErrorMessageModal from '../../components/ErrorMessageModal';
+import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
+//import Back from '../../../assets/icons/Back.svg';
 import { txtEmail, txtBack, txtQuestionPassword, txtInfoPassword, txtSend } from '../../utils/text';
-import GenericInput from '../../components/GenericInput';
-import SuccessInfo from '../../components/SuccessInfo';
-import { Link } from "expo-router";
+import GenericInput from '../components/GenericInput';
+import SuccessInfo from '../components/SuccessInfo';
 
 export default function RecoveryPasswordScreen() {
     const navigation = useNavigation();
@@ -44,13 +44,10 @@ export default function RecoveryPasswordScreen() {
     return (
         <SafeAreaProvider>
             <View style={styles.container}>
-                <Link href="/login" style={styles.backButton}>
-                    <Image
-                        source={require('../../../assets/back.png')}
-                        style={styles.backImage}
-                    />
+                <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.backButton}>
+                   {/*  <Back width={17} height={17} /> */}
                     <Text style={styles.backButtonText}>{txtBack}</Text>
-                </Link>
+                </TouchableOpacity>
                 <View style={styles.header}>
                     <Image
                         source={require('../../../assets/RecoveryPassword.png')}
@@ -97,10 +94,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: backgroundColor,
-    },
-    backImage: {
-        height: 17,
-        width: 10
     },
     backButton: {
         position: 'absolute',

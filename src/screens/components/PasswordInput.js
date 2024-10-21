@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { tittleForms } from '../utils/colors';
+import { backgroundColor, primaryColor, terciaryColor, inputColor, secondaryColor, tittleForms } from '../../utils/colors';
 
-const PasswordInput = ({ label, placeholder, value, onChangeText, maxLength, keyboardType}) => {
+const PasswordInput = ({ label, placeholder, value, onChangeText, secureTextEntry }) => {
   const [visiblePassword, setVisiblePassword] = useState(false);
+
+  const onPressEyePassword = () => {
+    setVisiblePassword(!visiblePassword);
+  };
 
   return (
     <View style={styles.labelContainer}>
@@ -14,9 +18,17 @@ const PasswordInput = ({ label, placeholder, value, onChangeText, maxLength, key
           placeholder={placeholder}
           value={value}
           onChangeText={onChangeText}
-          maxLength={maxLength}
-          keyboardType={keyboardType}
+          secureTextEntry={secureTextEntry && !visiblePassword}
+          maxLength={25}
         />
+        {secureTextEntry && (
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={onPressEyePassword}
+            style={styles.eyeIcon}
+          >
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -43,9 +55,13 @@ const styles = StyleSheet.create({
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    position: 'relative'
+    position: 'relative',
   },
-
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
+    paddingBottom:10
+  },
 });
 
 export default PasswordInput;

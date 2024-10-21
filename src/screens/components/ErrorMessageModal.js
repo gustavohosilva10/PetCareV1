@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Modal, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { backgroundColor, primaryColor } from '../utils/colors';
+import { backgroundColor, primaryColor } from '../../utils/colors';
 
 export default function ErrorMessageModal({ visible, message, onClose }) {
   return (
@@ -9,6 +9,7 @@ export default function ErrorMessageModal({ visible, message, onClose }) {
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
+
     >
       <View style={styles.container}>
         <View style={styles.modalContent}>
