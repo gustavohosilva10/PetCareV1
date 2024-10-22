@@ -63,3 +63,5 @@ export const txtUnknown = 'Ocorreu um erro desconhecido. Tente novamente.';
 export const txtErrorServer = 'Erro na conexão com o servidor. Tente novamente mais tarde.';
 export const txtErrorRegister = 'Erro ao realizar o cadastro';
 export const txtErrorDataUser = 'Erro ao carregar dados do usuário';
+
+export const txtLogout = 'Sair';

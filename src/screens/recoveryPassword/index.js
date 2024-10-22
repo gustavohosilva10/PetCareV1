@@ -9,6 +9,7 @@ import ErrorMessageModal from '../../screens/components/ErrorMessageModal';
 import { txtEmail, txtBack, txtQuestionPassword, txtInfoPassword, txtSend } from '../../utils/text';
 import GenericInput from '../components/GenericInput';
 import SuccessInfo from '../components/SuccessInfo';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function RecoveryPasswordScreen() {
     const navigation = useNavigation();
@@ -19,6 +20,11 @@ export default function RecoveryPasswordScreen() {
     const [isSuccess, setIsSuccess] = useState(true);
 
     const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
+
+    const goBack = () => {
+        navigation.navigate('Login');
+    }
+
     const handleReset = async () => {
         if (!email) {
             setMessage("O e-mail é obrigatório.");
@@ -44,8 +50,8 @@ export default function RecoveryPasswordScreen() {
     return (
         <SafeAreaProvider>
             <View style={styles.container}>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.backButton}>
-                   {/*  <Back width={17} height={17} /> */}
+                <TouchableOpacity onPress={goBack} style={styles.backButton}>
+                    <FontAwesome5 name="chevron-left" size={24} color={tittleForms} />
                     <Text style={styles.backButtonText}>{txtBack}</Text>
                 </TouchableOpacity>
                 <View style={styles.header}>
@@ -101,6 +107,7 @@ const styles = StyleSheet.create({
         left: 24,
         flexDirection: 'row',
         alignItems: 'center',
+        paddingTop: 35
     },
     backButtonText: {
         color: terciaryColor,
@@ -115,7 +122,7 @@ const styles = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 40,
+        marginTop: 80,
         marginHorizontal: 12
     },
     content: {

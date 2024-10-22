@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         fontFamily: 'Lato-Regular',
         padding: 28,
+        paddingTop: 35,
     },
     petCardContent: {
         justifyContent: 'center'

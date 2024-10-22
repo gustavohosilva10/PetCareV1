@@ -5,10 +5,11 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { backgroundColor, terciaryColor, secondaryColor, tittleForms } from '../../utils/colors';
 import CardAction from '../components/CardAction';
-import { txtBack, txtMyInfo, txtUpdateInfo, txtCreatedAccount, txtMyProfile, txtMyProfileInfo, txtEmail, txtName, txtDocument, txtCellphone, txtAccountQuestion } from '../../utils/text';
+import { txtBack, txtMyInfo, txtUpdateInfo, txtCreatedAccount, txtMyProfile, txtMyProfileInfo, txtEmail, txtName, txtDocument, txtCellphone, txtLogout } from '../../utils/text';
 import { useFocusEffect } from '@react-navigation/native';
 import Api from '../../api';
 import { FontAwesome5 } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
@@ -34,6 +35,18 @@ export default function ProfileScreen() {
         navigation.navigate('UpdateProfile');
     }
 
+    const goLogout = async () => {
+        try {
+            await AsyncStorage.removeItem('token');
+            
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],  
+            });
+        } catch (error) {
+            console.error('Erro ao limpar o token durante o logout:', error);
+        }
+    };
 
     useFocusEffect(
         useCallback(() => {
@@ -142,6 +155,12 @@ export default function ProfileScreen() {
                                 </View>
                             </View>
                         </View>
+
+                        <View style={styles.logoutContainer}>
+                            <TouchableOpacity onPress={goLogout} style={styles.userInfoText}>
+                                <Text style={styles.userName}>{txtLogout}</Text>
+                            </TouchableOpacity>
+                        </View>
                     </>
 
                 }
@@ -223,5 +242,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: secondaryColor,
         fontFamily: 'Lato-Regular',
+    },
+    logoutContainer: {
+        justifyContent: 'center',
+        alignSelf: 'center'
     }
 });
