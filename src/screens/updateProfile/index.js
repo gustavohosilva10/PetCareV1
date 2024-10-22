@@ -75,7 +75,6 @@ export default function UpdateProfileScreen() {
          
         try {
             const response = await Api.updateUser(name, email, document, cellphone)
-            console.log(response.message)
             if (response?.message) {
                 setMessage(response.message);
                 setIsSuccess(true);
@@ -96,7 +95,6 @@ export default function UpdateProfileScreen() {
                 setIsErrorModalVisible(true);
             }
         } catch (error) {
-            console.log(error)
             setMessage(txtErrorUpdateProfile);
             setIsErrorModalVisible(true);
         }

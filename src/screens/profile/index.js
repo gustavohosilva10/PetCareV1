@@ -22,9 +22,7 @@ export default function ProfileScreen() {
     const [info, setInfo] = useState(false);
 
     const goBack = () => {
-        console.warn('aq')
         navigation.navigate('Home1');
-        console.log(navigation.navigate('Home'))
     };
 
     const goData = () => {
@@ -44,7 +42,6 @@ export default function ProfileScreen() {
                 routes: [{ name: 'Login' }],  
             });
         } catch (error) {
-            console.error('Erro ao limpar o token durante o logout:', error);
         }
     };
 

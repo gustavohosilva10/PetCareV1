@@ -15,13 +15,13 @@ import SuccessInfoScreen from './src/screens/components/SuccessInfo';
 import IntroductionScreen from './src/screens/introduction';
 import HomeScreen from './src/screens/home';
 import ProfileScreen from './src/screens/profile';
-import UpdateProfileScreen from './src/screens/updateProfile'; 
+import UpdateProfileScreen from './src/screens/updateProfile';
 import ButtomTab from './src/screens/components/ButtomTab';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
- function HomeTabs() {
+function HomeTabs() {
   const [isProfileTabFocused, setProfileTabFocus] = useState(false);
   return (
     <Tab.Navigator
@@ -39,7 +39,7 @@ const Tab = createBottomTabNavigator();
           fontSize: 16,
         },
         tabStyle: {
-          flexDirection: 'column', 
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: backgroundColor,
@@ -50,8 +50,7 @@ const Tab = createBottomTabNavigator();
         name="Home1"
         component={HomeScreen}
         headerShown={false}
-        options={{ headerShown: false }}
-        /* options={{
+        options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ focused }) => (
             <Image
@@ -62,27 +61,25 @@ const Tab = createBottomTabNavigator();
                 resizeMode: 'cover',
               }}
             />
-          ),  
+          ),
           headerShown: false,
-        }} */
+        }}
       />
       <Tab.Screen
         name="Home2"
         component={IntroductionScreen}
-        options={{ headerShown: false }}
-       /*  options={{
+        options={{
           tabBarLabel: 'Novo Pet',
           tabBarIcon: ({ focused }) => (
-            <ButtomTab  style={{ paddingTop: 25 }}/>
-          ), 
+            <ButtomTab style={{ paddingTop: 25 }} />
+          ),
           headerShown: false,
-        }}  */
+        }}
       />
       <Tab.Screen
         name="Perfil"
         component={ProfileScreen}
-        options={{ headerShown: false }}
-        /* options={({ route }) => ({
+        options={({ route }) => ({
           tabBarLabel: 'Perfil',
           tabBarIcon: ({ focused }) => (
             <Image
@@ -93,9 +90,9 @@ const Tab = createBottomTabNavigator();
                 resizeMode: 'cover',
               }}
             />
-          ),  
+          ),
           headerShown: false,
-        })} */
+        })}
         listeners={({ navigation, route }) => ({
           focus: () => {
             setProfileTabFocus(true);
@@ -105,10 +102,10 @@ const Tab = createBottomTabNavigator();
           },
         })}
       />
-     
+
     </Tab.Navigator>
   );
-} 
+}
 
 export default function App() {
   return (
@@ -116,13 +113,13 @@ export default function App() {
       <Stack.Navigator initialRouteName={PreloadingScreen}>
         <Stack.Screen name="Preloading" component={PreloadingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} /> 
+        <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
         <Stack.Screen name="RecoveryPassword" component={RecoveryPasswordScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SuccessInfo" component={SuccessInfoScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false }} /> 
-        <Stack.Screen name="Home" component={HomeTabs} options={{ headerShown: false }} /> 
-        <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} /> 
-        <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{ headerShown: false }} />  
+        <Stack.Screen name="Introduction" component={IntroductionScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Home" component={HomeTabs} options={{ headerShown: false }} />
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

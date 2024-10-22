@@ -43,7 +43,6 @@ export default function IntroductionScreen() {
           setTutorialCompleted(true);
         }
       } catch (error) {
-        console.log('Error loading tutorial status', error);
       }
     }
     loadTutorialStatus();

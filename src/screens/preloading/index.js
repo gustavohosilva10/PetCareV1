@@ -10,7 +10,6 @@ export default function PreloadingScreen() {
     useEffect(() => {
         async function loadTutorialStatus() {
             const status = await AsyncStorage.getItem('completedIntroduction');
-            console.warn(status);
             if (status === 'completed') {
                 AsyncStorage.getItem('token').then(value => {
                     if (value) {
